@@ -2,50 +2,58 @@ package it.at.akka.apps;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.typesafe.config.ConfigFactory;
 
 import akka.actor.ActorSystem;
 import akka.actor.PoisonPill;
 import akka.actor.Props;
 import akka.cluster.singleton.ClusterSingletonManager;
 import akka.cluster.singleton.ClusterSingletonManagerSettings;
-import akka.routing.RandomPool;
-import it.at.akka.actors.MasterActor;
-import it.at.akka.actors.WorkerActor;
+import it.at.akka.actors.ClusterEventActor;
+import it.at.akka.actors.NodeActor;
+import it.at.akka.actors.ResolverActor;
+import it.at.akka.guice.GuiceActorUtils;
 import it.at.akka.guice.GuiceExtension;
 import it.at.akka.guice.GuiceExtensionImpl;
 
 public class SimpleApplication {
-	private final Injector injector;	
+	private final Injector injector;
+	private final ActorSystem system;	
 
 	@Inject
-	public SimpleApplication(Injector injector) {
+	public SimpleApplication(Injector injector, ActorSystem system) {
 		this.injector = injector;
+		this.system = system;
 	}
 
 	public void run() {		
-        //create system
-        final ActorSystem system = ActorSystem.create("MineCluster", ConfigFactory.load());
+        //register Guice provider
         system.registerExtension(GuiceExtension.provider);
 
-        //configure Guice
+        //configure Guice provider
         final GuiceExtensionImpl guiceExtension = GuiceExtension.provider.get(system);
         guiceExtension.setInjector(injector);         
         
         //clusterSettings
-        final ClusterSingletonManagerSettings settings = ClusterSingletonManagerSettings.create(system);
+        final ClusterSingletonManagerSettings settings = ClusterSingletonManagerSettings.create(system).withRole("boooo");
         
         system.actorOf(
-//        	ClusterSingletonManager.props(
-//				Props.create(MasterActor.class), PoisonPill.class, settings), "master"
-        		
-    		Props.create(MasterActor.class), "master"
+    		build(ResolverActor.class), "resolver"
 		);
         
-        system.actorOf(    		
-    		ClusterSingletonManager.props(    			
-				new RandomPool(5).props(Props.create(WorkerActor.class)), PoisonPill.class, settings), "worker"    		
+        system.actorOf(
+    		build(NodeActor.class)
 		);
+        
+//        system.actorOf(    		
+//    		ClusterSingletonManager.props(    			
+//				new RandomPool(5).props(build(WorkerActor.class)), PoisonPill.class, settings), "worker"    		
+//		);
+        
+        system.actorOf(
+        	ClusterSingletonManager.props(
+    			build(ClusterEventActor.class), PoisonPill.class, settings), "cluster-event"
+		);
+        
         
 //        final ClusterSingletonProxySettings deliveryMasterSettings = ClusterSingletonProxySettings.create(system).withRole("master");        
 //        final ActorRef deliveryMaster = system.actorOf(ClusterSingletonProxy.props("/user/delivery-master", deliveryMasterSettings), "delivery-master-proxy");
@@ -98,4 +106,9 @@ public class SimpleApplication {
 //		);
 				
 	}
+	
+	public Props build(Class<?> clazz) {
+		return GuiceActorUtils.makeProps(system, clazz);
+	}
+	
 }
