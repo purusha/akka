@@ -35,7 +35,7 @@ public class NodeActor extends GuiceAbstractActor {
 		); 		
 		
 		final ClusterSingletonProxySettings deliveryMasterSettings = ClusterSingletonProxySettings.create(system);        		
-		eventProxy = system.actorOf(ClusterSingletonProxy.props("/user/cluster-event", deliveryMasterSettings));		
+		eventProxy = system.actorOf(ClusterSingletonProxy.props("/user/" + ClusterEventActor.ACTOR_NAME, deliveryMasterSettings));		
 		
 		mine = UUID.randomUUID();
 		log.info("mine uuid is {}", mine);

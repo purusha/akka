@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ResolverActor extends GuiceAbstractActor {
 
+	public static final String ACTOR_NAME = "resolver";
+
 	@Override
 	public void postStop() throws Exception {
 		super.postStop();

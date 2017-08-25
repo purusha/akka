@@ -17,7 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ClusterEventActor extends GuiceAbstractActor {
 	
-	private static final String USER_RESOLVER = "/user/resolver";
+	private static final String USER_RESOLVER = "/user/" + ResolverActor.ACTOR_NAME;
+	
+	public static final String ACTOR_NAME = "cluster-event";
+	
 	private Router router;
 	
 	@Inject

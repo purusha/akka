@@ -37,7 +37,7 @@ public class SimpleApplication {
         final ClusterSingletonManagerSettings settings = ClusterSingletonManagerSettings.create(system).withRole("boooo");
         
         system.actorOf(
-    		build(ResolverActor.class), "resolver"
+    		build(ResolverActor.class), ResolverActor.ACTOR_NAME
 		);
         
         system.actorOf(
@@ -51,7 +51,7 @@ public class SimpleApplication {
         
         system.actorOf(
         	ClusterSingletonManager.props(
-    			build(ClusterEventActor.class), PoisonPill.class, settings), "cluster-event"
+    			build(ClusterEventActor.class), PoisonPill.class, settings), ClusterEventActor.ACTOR_NAME
 		);
         
         
