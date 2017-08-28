@@ -7,4 +7,8 @@ master actor send message to the cluster singleton (pool is selected across the 
 
 
 **example2**  
-each node of application should send a message to a cluster singleton actor who answer to another actor of each node
+each node of application should send a message to a cluster singleton actor who answer to another actor of sender node
+
+
+**example4**  
+simple example of ask Pattern with scala Future

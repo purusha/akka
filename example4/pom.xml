@@ -16,7 +16,7 @@
     <packaging>jar</packaging>
 
     <groupId>it.at.akka</groupId>
-    <artifactId>example1-h-cluster</artifactId>
+    <artifactId>example4-h-cluster</artifactId>
     <version>0.1.0</version>
     <name>HCluster</name>
     <description>a module for do nothing</description>
@@ -51,7 +51,6 @@
                 <artifactId>jcl-over-slf4j</artifactId>
                 <version>1.7.12</version>
             </dependency>
-
 
             <!-- http -->
             <dependency>
@@ -127,13 +126,6 @@
                 <groupId>com.typesafe.akka</groupId>
                 <artifactId>akka-slf4j_2.11</artifactId>
                 <version>${akka.version}</version>
-            </dependency>
-
-            <!-- Tarantool client -->
-            <dependency>
-                <groupId>org.tarantool</groupId>
-                <artifactId>connector</artifactId>
-                <version>1.6.6</version>
             </dependency>
 
             <dependency>
