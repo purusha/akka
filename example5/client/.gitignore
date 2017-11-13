@@ -1,0 +1,11 @@
+.classpath
+.project
+.settings/
+target/
+*~
+*.log
+*/activemq-data/
+.idea/
+*.iml
+
+/platform-provisioning/report.csv

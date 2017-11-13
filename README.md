@@ -12,3 +12,7 @@ each node of application should send a message to a cluster singleton actor who 
 
 **example4**  
 simple example of ask Pattern with scala Future
+
+
+**example5**
+total custom client-server communication using java NIO
