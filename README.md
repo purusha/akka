@@ -16,3 +16,7 @@ simple example of ask Pattern with scala Future
 
 **example5**  
 total custom client-server communication using java NIO
+
+
+**stream**
+examples working with akka stream processing pipelines
