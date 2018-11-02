@@ -15,7 +15,7 @@ import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
 
 public class DataImporter {
-    private static final String CONTENT = "1;2;3;4;5;6;7;8;9;10;20;30;40;50;100;101"; //;199.1
+    private static final String CONTENT = "1;2;3;4;5;6;7;8;1;1";
     
     public static void main(String[] args) {
         
@@ -56,7 +56,7 @@ class Importer {
         return 
             Flow.of(Integer.class)
                 .grouped(2)
-                .mapAsyncUnordered(8, integers ->
+                .mapAsyncUnordered(4, integers ->
                     CompletableFuture.supplyAsync(() -> integers
                         .stream()
                         .mapToDouble(v -> v)
