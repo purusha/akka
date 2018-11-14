@@ -54,7 +54,8 @@ class Importer {
 
     private Flow<Integer, Double, NotUsed> computeAverage() {
         return 
-            Flow.of(Integer.class)
+            Flow
+                .of(Integer.class)
                 .grouped(2)
                 .mapAsyncUnordered(4, integers ->
                     CompletableFuture.supplyAsync(() -> integers

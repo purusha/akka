@@ -19,21 +19,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GroupLogFile {
+    private static final Pattern LOGLEVEL = Pattern.compile(".*\\[(DEBUG|INFO|WARN|ERROR)\\].*");
+    
     public static void main(String[] args) throws IOException {
   
         final ActorSystem system = ActorSystem.create("Sys");
         final ActorMaterializer materializer = ActorMaterializer.create(system);
     
-        final Pattern loglevelPattern = Pattern.compile(".*\\[(DEBUG|INFO|WARN|ERROR)\\].*");
-    
         // read lines from a log file
-        final String inPath = "src/main/resources/logfile.txt";
-        final File inputFile = new File(inPath);
+        final File inputFile = new File("src/main/resources/logfile.txt");
     
         final Map<String, PrintWriter> outputs = new HashMap<>();
         for (String level : Arrays.asList("DEBUG", "INFO", "WARN", "ERROR", "UNKNOWN")) {
             final String outPath = "target/log-" + level + ".txt";
             final PrintWriter output = new PrintWriter(new FileOutputStream(outPath), true);
+            
             outputs.put(level, output);
         }
     
@@ -45,11 +45,9 @@ public class GroupLogFile {
             
             // group them by log level
             .map((line) -> {
-                final Matcher matcher = loglevelPattern.matcher(line);
-                if (matcher.find())
-                  return new Pair<>(matcher.group(1), line);
-                else
-                  return new Pair<>("UNKNOWN", line);
+                final Matcher matcher = LOGLEVEL.matcher(line);
+                
+                return matcher.find() ? new Pair<>(matcher.group(1), line) : new Pair<>("UNKNOWN", line);
             })
             
             // write lines of each group to a separate file
